@@ -3,13 +3,13 @@
   const LABEL_KEY = "openpt:sync:client-label";
   const DB_NAME = "openpt-sync";
   const DB_VERSION = 1;
-  const REMOTE_API_BASE = "https://openptapi.skylarenns.com";
+  const REMOTE_API_BASE = "https://openptapi.skylar.sh";
   const LOCAL_HOSTS = new Set(["", "localhost", "127.0.0.1", "::1"]);
 
   function defaultApiBase() {
     const hostname = location.hostname;
     if (location.protocol === "file:" || LOCAL_HOSTS.has(hostname) || hostname.endsWith(".localhost")) return "";
-    if (hostname === "openptapi.skylarenns.com") return "";
+    if (hostname === "openptapi.skylar.sh" || hostname === "openptapi.skylarenns.com") return "";
     return REMOTE_API_BASE;
   }
 

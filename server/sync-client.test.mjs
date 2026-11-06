@@ -4,11 +4,11 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import vm from "node:vm";
 
-async function loadSyncClient({ windowSetup = () => {}, fetchImpl = async () => new Response(JSON.stringify({ ok: true }), { status: 200 }) } = {}) {
+async function loadSyncClient({ location = { hostname: "127.0.0.1", protocol: "http:", origin: "http://127.0.0.1:5173" }, windowSetup = () => {}, fetchImpl = async () => new Response(JSON.stringify({ ok: true }), { status: 200 }) } = {}) {
   const source = await readFile(join(process.cwd(), "sync-client.js"), "utf8");
   const context = {
     window: {},
-    location: { hostname: "127.0.0.1", protocol: "http:", origin: "http://127.0.0.1:5173" },
+    location,
     crypto: { randomUUID: () => "client-test-id" },
     navigator: { userAgent: "Mac" },
     fetch: fetchImpl,
@@ -98,3 +98,32 @@ class MapStorage {
     this.values.delete(key);
   }
 }
+
+for (const [hostname, expectedBase] of [
+  ["openpt.dev", "https://openptapi.skylar.sh"],
+  ["openptapi.skylar.sh", ""],
+  ["openptapi.skylarenns.com", ""],
+]) {
+  test(`API selection supports ${hostname}`, async () => {
+    const Sync = await loadSyncClient({
+      location: { hostname, protocol: "https:", origin: `https://${hostname}` },
+      fetchImpl: async (url) => {
+        assert.equal(url, `${expectedBase}/api/auth/logout`);
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
+      },
+    });
+    await new Sync.OpenPTSyncClient().logout();
+  });
+}
+
+test("explicit legacy API override remains supported during migration", async () => {
+  const Sync = await loadSyncClient({
+    location: { hostname: "openpt.dev", protocol: "https:", origin: "https://openpt.dev" },
+    windowSetup(window) { window.OPENPT_API_BASE = "https://openptapi.skylarenns.com/"; },
+    fetchImpl: async (url) => {
+      assert.equal(url, "https://openptapi.skylarenns.com/api/auth/logout");
+      return new Response(JSON.stringify({ ok: true }), { status: 200 });
+    },
+  });
+  await new Sync.OpenPTSyncClient().logout();
+});

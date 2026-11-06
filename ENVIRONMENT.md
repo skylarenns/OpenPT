@@ -9,12 +9,12 @@ Check this file before deployment, server work, or Vercel verification.
 - Current expected version: `0.2.4-sync.20260518`.
 - Vercel redeploys automatically after pushes to `main`.
 - When testing Vercel, verify the visible title-bar version before testing behavior.
-- Vercel serves the static frontend. It uses `https://openptapi.skylarenns.com`
-  as the outward-facing sync API.
+- Vercel serves the static frontend on `https://openpt.dev`. The prepared client
+  default is `https://openptapi.skylar.sh`; verify its route before deployment.
 
 ## GitHub
 
-- Repository: `https://github.com/Skytheredhead/OpenPT.git`
+- Repository: `https://github.com/skylarenns/OpenPT.git`
 - Production branch for this project: `main`
 - User currently expects direct pushes to `main` for this MVP.
 
@@ -32,9 +32,9 @@ Check this file before deployment, server work, or Vercel verification.
 - App command: `npm run dev`
 - Default local port on the remote server: `5173`
 - Data directory default: `<repo>/.openpt-data`
-- Public API hostname: `openptapi.skylarenns.com`
-- Cloudflare tunnel ingress maps `openptapi.skylarenns.com` to
-  `http://127.0.0.1:5173`.
+- Target API hostname: `openptapi.skylar.sh`; legacy `openptapi.skylarenns.com` remains available during migration.
+- Add a route on the existing Cloudflare Tunnel mapping `openptapi.skylar.sh` to
+  `http://127.0.0.1:5175` (the systemd `port.conf` override).
 - The backend CORS allowlist must include the public frontend origin
   `https://openpt.dev`.
 - The public tunnel uses HTTPS, so the remote service should set
@@ -72,3 +72,7 @@ Start locally:
 ```sh
 npm run dev
 ```
+
+## skylar.sh migration
+
+See [DOMAIN-MIGRATION.md](DOMAIN-MIGRATION.md). Retain openptapi.skylarenns.com as a compatibility route; keep the public frontend and email links on openpt.dev. Verify the new API route before deploying the updated frontend default.
