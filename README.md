@@ -13,3 +13,7 @@ Features:
 - Jeopardy
 - Quiz mode
 - Learn mode
+
+## Domain migration
+
+See [DOMAIN-MIGRATION.md](DOMAIN-MIGRATION.md) for the skylar.sh target architecture, compatibility, verification and rollback procedure. Production cutover is a separate verified operation.

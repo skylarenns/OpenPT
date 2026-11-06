@@ -6,7 +6,7 @@ import { join } from "node:path";
 
 const HOST = "127.0.0.1";
 const PORT = Number(process.env.PORT || 8765);
-const REMOTE = process.env.OPENPT_SETUP_REMOTE || "skylarenns@shhh.skylarenns.com";
+const REMOTE = process.env.OPENPT_SETUP_REMOTE || "skylarenns@ssh.skylar.sh";
 const SUDO_PASSWORD_FILE = process.env.OPENPT_SETUP_SUDO_PASSWORD_FILE || join(homedir(), "Desktop", "192.168.1.174.rtf");
 const LOCAL_ENV_FILE = process.env.OPENPT_SETUP_LOCAL_ENV_FILE || "/tmp/openpt-account-smtp.env";
 
