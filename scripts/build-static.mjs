@@ -22,6 +22,7 @@ const rootFiles = [
   "icons.jsx",
   "device-glyphs.jsx",
   "engine.jsx",
+  "openpt-labs.js",
   "openpt-format.js",
   "sim-services.jsx",
   "protocol-runtime.jsx",
